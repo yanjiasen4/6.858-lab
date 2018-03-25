@@ -1,1 +1,35 @@
 ## Place your answers here.
+Exercise 2:
+[exploit-2a] - [zookd.c:70] - [http.c:105]
+overwritten 'reqpath' in function url_decode(). variable 'sql' represents the second part of 'buf' splited by space. We can format a request to 'GET / XXXXXX HTTP/1.0' where 'XXXXXX' represents a string length over 2048. 
+
+[exploit-2b] - [http.c:165]
+use 'value' variable overflow 'envvar'. Input must pass the header parse so the format of 'buf' should be 'GET / HTTP1.0\r\n key: valueXXXXXXXX'
+
+Exercise 3(Warm-up):
+Change syscall number to 'sys_unlink' and pass '/home/httpd/grades.txt'
+
+Exercise 3:
+zookld.c:70 - http.c:105
+overflow 'reqpath'
+
+Exercise 4:
+
+use gdb to get 'unlink' address
+
+'p unlink'
+
+set argstring and address of argstring. The overflowed stack can be showed as follow:
+
+| '/home/httpd/grades.txt'    |
+|  address of string          |
+|  return address (no matter) |
+|  unlink address             | <- return address
+|  0000000000000000000000000  | <- %ebp
+|  0000000000000000000000000  |
+
+Exercise 5:
+all in bugs.txt
+
+Exercise 6:
+Check length of string and throw error when it get out of bounded.

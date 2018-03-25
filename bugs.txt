@@ -2,16 +2,46 @@
 # [file:#lines]
 # desc
 #
+#[http.c:95]
+#call sprintf() to write 'sp2' into 'envp' which may cause stack overflow.
+#
+#   envp += sprintf(envp, "SERVER_PROTOCOL=%s", sp2) + 1;
+# NOT a BUG: env is static variable
 
-[zookd.c:1612]
-description goes here. for example, the 'buf' variable can be
-overwritten by the 'msg' variable because ...
+[http.c:105]
+url_decode() will deocde url of http and write it into 'reqpath'. And 'reqpath' can be overwritten by a long url inputed by user.
+    
+    url_decode(reqpath, sql);
+    
+    for (;;)
+    {
+        ......
+        else
+        {
+            *dst = *src;
+            src++;
+            if (*dst == '\0')
+                break;
+        }
+        dst++;
+    }   
 
-    <paste offending line(s) of code here>
+#[http.c:128]
+#call function http_read_line() which do not check the bound of input.
 
-[http.c:1512]
-another description.
+[http.c:159]
+same as bug at 'http.c:105'. variable 'value' can be overwritten by the 'sp' variable because function url_decode do not check the bound of input.
 
-    <paste offending line(s) of code here>
+[http.c:165]
+'envvar' can be overwritten by the user input 'buf' in function sprintf()
+
+[http.c:282]
+'pn' can be overwritten by 'name'.
+
+[http.c:358]
+dir_join() will call a strcpy and this may cause 'name' variable overwritten by 'pn'
+
+[zookd.c:70]
+unsafe function http_request_line()
 
 # many more come here
