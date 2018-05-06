@@ -11,7 +11,7 @@ import traceback
 def transfer():
     warning = None
     try:
-        if 'recipient' in request.form:
+        if 'recipient' in request.form and g.user.person.username != request.form['recipient']:
             zoobars = symint(request.form['zoobars'])
             bank.transfer(g.user.person.username,
                           request.form['recipient'], zoobars)
